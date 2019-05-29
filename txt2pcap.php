@@ -1,5 +1,5 @@
+#!/usr/bin/env php -f 
 <?php
-
 class pcap_file_writer
 {
 	private $f;
