@@ -53,7 +53,7 @@ function str_to_sec_usec($time) {
 	$ret=array();
 	list($h, $m, $s) = explode(':', substr($time,0,8));
 	$ret[0]=($h * 3600) + ($m * 60) + $s;
-	$ret[1]=intval(substr($time,8));
+	$ret[1]=intval(substr($time,9));
 	return $ret;
 }
 
@@ -100,11 +100,12 @@ function main(){
 		}
 
 		//search for timestamp string, in the format of HH:MM:SS.uuuuuu
-		if (preg_match('/^[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{1,}/', $line)==1){
-			$ts=str_to_sec_usec($line);
+		if (preg_match('/^[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{1,}/', $line,$matches)==1){
+			$ts=str_to_sec_usec($matches[0]);
 		}else{
 			$ts=array(0,0);
 		}
+
 		$pos=strpos($line," 000");
 		if ($pos==FALSE){
 			die("Error invalid line $lineno: $line\n");
@@ -123,7 +124,7 @@ function main(){
 				$pcap->write_packet($pkt);
 			}
 			$newpacket=true;
-			$pkt['data']='';
+			$pkt['data']=hex2bin('2052454356002053454e44000800');
 			$bytes_read=0;
 		}else{
 			if ($offset!=$bytes_read){
@@ -136,7 +137,7 @@ function main(){
 			$data_str=str_replace(' ','',trim($matches[0]));
 			$data_bin=hex2bin($data_str);
 			$pkt['data'].=$data_bin;
-			$bytes_read=strlen($pkt['data']);
+			$bytes_read+=strlen($data_bin);
 		}
 	}
 
