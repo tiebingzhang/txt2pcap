@@ -107,8 +107,8 @@ function main(){
 		}
 
 		$pos=strpos($line," 000");
-		if ($pos==FALSE){
-			die("Error invalid line $lineno: $line\n");
+		if ($pos===FALSE){
+			die("Error invalid line $lineno: --$line--\n");
 		}
 
 		//read in data offset 
